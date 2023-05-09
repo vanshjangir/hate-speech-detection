@@ -1,3 +1,3 @@
-#Hate Speech Detection
+# Hate Speech Detection
 
 using python, will be updated soon
