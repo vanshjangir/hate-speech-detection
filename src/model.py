@@ -34,7 +34,7 @@ def vectorize(traindoc):
     filename = 'w2v_model.sav'
     joblib.dump(w2v_model, filename)
 
-    print("word2vec done!!")
+    print("word2vec training completed!!")
     return w2v_model,traindoc_vect_avg 
 
 def makevector(w2v_model, doc):
@@ -64,7 +64,7 @@ def SvmModel(doc_vect_avg, target):
     model = SVC()
     print("training model...")
     model.fit(doc_vect_avg, target)
-    print("model training done!!")
+    print("model training completed!!")
     return model 
 
 
@@ -72,7 +72,6 @@ def savemodel(model):
     '''
     saves the model locally
     '''
-
     filename = 'finalized_model.sav'
     joblib.dump(model, filename)
 
@@ -87,12 +86,15 @@ def main():
     dataset.text = dataset.text.apply(lambda x: x.split())
     dataset = dataset[['text', 'label']]
 
-    #spilltings into training and testing
+
     Xtrain, Xtest, ytrain, ytest = train_test_split(dataset['text'], dataset['label'], test_size=0.2)
 
     w2v_model,Xtrain_vect_avg = vectorize(Xtrain)
+
     Xtest_vect_avg = makevector(w2v_model,Xtest)
+
     model = SvmModel(Xtrain_vect_avg, ytrain)
+
     print(accuracy(model,Xtest_vect_avg, ytest))
     savemodel(model)
 
