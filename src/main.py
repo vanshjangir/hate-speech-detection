@@ -31,7 +31,13 @@ class APPwindow(ctk.CTk):
     
         self.BtnFile = ctk.CTkButton(self, text = "File", command = self.textfromfile())
         self.BtnFile.place(relx = 0.8, rely = 0.3, anchor = "center")
+
+        self.TextBox = ctk.CTkTextbox(self, fg_color="transparent",border_width=1, corner_radius=1, bg_color="#2b2b2b")
+        self.TextBox.configure(height = 200, width = 300)
+        self.TextBox.bind('<Return>', lambda event: userinput(event, self, text = self.TextBox.get("0.0","end")))
     
+        self.LinkEntry = ctk.CTkEntry(self, placeholder_text = "link", width = 600)
+        self.LinkEntry.bind('<Return>', lambda event: userinput(event, self, link = self.LinkEntry.get()))
 
     def textfromfile(self):
         '''
@@ -43,12 +49,8 @@ class APPwindow(ctk.CTk):
         '''
         prompts user to give input in a testbox and returns a list of sentences
         '''
-        self.TextBox = ctk.CTkTextbox(self, fg_color="transparent",border_width=1, corner_radius=1, bg_color="#2b2b2b")
-        self.TextBox.configure(height = 200, width = 300)
-        self.TextBox.bind('<Return>', lambda event: userinput(event, self, text = self.TextBox.get("0.0","end")))
         try:
-            if self.LinkEntry.winfo_exists():
-                self.LinkEntry.destroy()
+            self.LinkEntry.place_forget()
         except:
             pass 
         self.TextBox.place(relx = 0.5, rely = 0.7, anchor = "center")
@@ -57,11 +59,8 @@ class APPwindow(ctk.CTk):
         '''
         returns list of comments on a youtube video 
         '''    
-        self.LinkEntry = ctk.CTkEntry(self, placeholder_text = "link", width = 600)
-        self.LinkEntry.bind('<Return>', lambda event: userinput(event, self, link = self.LinkEntry.get()))
         try:
-            if self.TextBox.winfo_exists():
-                self.TextBox.destroy()
+            self.TextBox.place_forget()
         except:
             pass
         self.LinkEntry.place(relx = 0.5, rely = 0.6, anchor = "center")
