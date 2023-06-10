@@ -14,7 +14,7 @@ class APPwindow(ctk.CTk):
 
         super().__init__()
 
-        self.geometry('800x500')
+        self.geometry('1920x1080')
         self.title('Hate Speech Detection')
 
         ctk.set_appearance_mode("dark")
@@ -29,44 +29,54 @@ class APPwindow(ctk.CTk):
         self.BtnText = ctk.CTkButton(self, text = "Text", command = self.textfrominput)
         self.BtnText.place(relx = 0.2, rely = 0.3, anchor = "center")
     
-        self.BtnFile = ctk.CTkButton(self, text = "File", command = self.textfromfile())
+        self.BtnFile = ctk.CTkButton(self, text = "File", command = self.textfromfile)
         self.BtnFile.place(relx = 0.8, rely = 0.3, anchor = "center")
 
-        self.TextBox = ctk.CTkTextbox(self, fg_color="transparent",border_width=1, corner_radius=1, bg_color="#2b2b2b")
-        self.TextBox.configure(height = 200, width = 300)
-        self.TextBox.bind('<Return>', lambda event: userinput(event, self, text = self.TextBox.get("0.0","end")))
+        self.TextBox = ctk.CTkTextbox(self, fg_color="transparent",border_width=2, corner_radius=4, bg_color="#2b2b2b")
+        self.TextBox.bind('<Return>', lambda event: userinput(self, text = self.TextBox.get("0.0","end")))
     
-        self.LinkEntry = ctk.CTkEntry(self, placeholder_text = "link", width = 600)
-        self.LinkEntry.bind('<Return>', lambda event: userinput(event, self, link = self.LinkEntry.get()))
+        self.LinkEntry = ctk.CTkEntry(self, placeholder_text = "link")
+        self.LinkEntry.bind('<Return>', lambda event: userinput(self, link = self.LinkEntry.get()))
 
     def textfromfile(self):
         '''
         takes a .txt file and returns a list of all the sentences
         '''
-        pass 
+        filename = ctk.filedialog.askopenfilename(title = "Select a File", 
+                                          filetypes = (("Text files", "*.txt*"),("all files","*.*")))
+
+        file  = open(filename, 'r')
+        data = ""
+        with open(filename, 'r') as file:
+            data = file.read().replace('\n','')
+
+        userinput(root = self,text = data)
 
     def textfrominput(self):
         '''
         prompts user to give input in a testbox and returns a list of sentences
         '''
+        self.TextBox.configure(width = self.winfo_width()*0.71, height = self.winfo_height()*0.3)
         try:
             self.LinkEntry.place_forget()
         except:
-            pass 
-        self.TextBox.place(relx = 0.5, rely = 0.7, anchor = "center")
+            pass
+
+        self.TextBox.place(relx = 0.5, rely = 0.5, anchor = "center")
     
     def youtubecomments(self):
         '''
         returns list of comments on a youtube video 
         '''    
+        self.LinkEntry.configure(width = self.winfo_width()*0.71)
         try:
             self.TextBox.place_forget()
         except:
             pass
-        self.LinkEntry.place(relx = 0.5, rely = 0.6, anchor = "center")
+        self.LinkEntry.place(relx = 0.5, rely = 0.4, anchor = "center")
 
     
-def userinput(event, root, link = None, text = None):
+def userinput(root, link = None, text = None):
     '''
     takes a link from entrybox or string from textbox and shows the results
     '''
@@ -87,10 +97,11 @@ def userinput(event, root, link = None, text = None):
         comments = youtube.fetch_video_comments(video_id, api_key)
         print("youtube comments:", len(comments))
         corpus = comments
+
     elif text != None:
         corpus = text.split(".")
 
-    result(root,corpus)
+    result(root,corpus[:-1])
 
 
 def result(root,text):
@@ -104,17 +115,25 @@ def result(root,text):
     test = model.makevector(w2v_model, test)
     score = loadmodel.predict(test)
 
-    positive= 0 
-    negative = 0 
-    for i in score:
-        if i == 1:
-            negative += 1
-        else:
-            positive += 1
+    negative = ""
+    num = 0 
+    for i in range(len(text)):
+        if score[i] == 1:
+            negative += (f"{num+1}. ")
+            negative += str(text[i])
+            negative += "\n\n";
+            num += 1 
 
-    ResultLabel = ctk.CTkLabel(root, fg_color="transparent", text = (f"no of positves are {positive} and negatives are {negative}"))
-    ResultLabel.configure(height = 20, width = 100)
-    ResultLabel.place(relx = 0.5, rely = 0.7,anchor = "center")
+    if len(negative) == 0:
+        negative = "This document does not contains any hate speech"
+
+            
+    ResultLabel = ctk.CTkTextbox(root, fg_color="transparent", activate_scrollbars = True)
+    ResultLabel.configure(height = root.winfo_height()*0.3, width = root.winfo_width()*0.71)
+    ResultLabel.insert("0.0", (f"Out of {len(text)}  no. of negatives are {num}\n\n"))
+    ResultLabel.insert("end", negative)
+    ResultLabel.configure(state = "disabled")
+    ResultLabel.place(relx = 0.5, rely = 0.85, anchor = "center")
 
 def main():
     App = APPwindow()
