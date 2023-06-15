@@ -26,7 +26,7 @@ def userinput(link = None, text = None):
                 break 
 
         comments = youtube.fetch_video_comments(video_id, api_key)
-        if comments == "ERROR 1":
+        if comments == "ERROR 1: input not a link":
             return comments 
         print("youtube comments:", len(comments))
         corpus = comments
@@ -52,10 +52,12 @@ def result(text):
     num = 0 
     for i in range(len(text)):
         if score[i] == 1:
-            negative += (f"{num+1}. ")
-            negative += str(text[i])
-            negative += "\n\n";
+            negative += f"{num+1}. "
+            negative += text[i]
+            negative += "\n\n"
             num += 1 
+
+    negative = f"{num} hate comments<br>" + negative
 
     if len(negative) == 0:
         negative = "This document does not contains any hate speech"

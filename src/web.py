@@ -1,25 +1,28 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, render_template_string, request, url_for, Response
 import bridge 
 
 app = Flask(__name__)
 
-@app.route("/home")
+@app.route("/")
 def home():
     return render_template("index.html")
 
 @app.route("/input", methods = ["POST", "GET"])
 def input():
     if request.method == "POST":
-        test = request.form['input']
-        final = bridge.userinput(text = test)
-        return redirect(url_for("result", rs = final))
+        formdata = request.form['input']
+        final = bridge.userinput(link = formdata)
+        def generate():
+            for line in final.split("\n\n"):
+                yield line 
+
+        showdata = ""
+        for i in generate():
+            showdata += i
+            showdata += "<br>"
+        return render_template("input.html", r = showdata)
     else:
         return render_template("input.html")
-
-@app.route("/<rs>")
-def result(rs):
-    return render_template("result.html", Result = rs)
-
 
 
 def main():
