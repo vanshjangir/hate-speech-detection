@@ -13,12 +13,18 @@ def input():
         textdata = request.form['text']
         linkdata = request.form['youtube link']
         filedata = request.form['file']
-        
+        file = open(filedata, "r")
+        filetextdata = file.read()
+
+        print(len(filetextdata))
+
         final = ""
         if len(textdata) != 0:
-            final = bridge.userinput(text = textdata)
-        else:
-            final = bridge.userinput(link = linkdata)
+            final += bridge.userinput(text = textdata)
+        if len(linkdata) != 0:
+            final += bridge.userinput(link = linkdata)
+        if len(filetextdata) != 0:
+            final += bridge.userinput(text = filetextdata)
 
         def generate():
             for line in final.split("\n\n"):
