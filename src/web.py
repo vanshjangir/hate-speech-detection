@@ -3,12 +3,8 @@ import bridge
 
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-@app.route("/input", methods = ["POST", "GET"])
-def input():
+@app.route("/", methods = ["POST", "GET"])
+def index():
     if request.method == "POST":
         textdata = request.form['text']
         linkdata = request.form['youtube link']
@@ -34,9 +30,9 @@ def input():
         for i in generate():
             showdata += i
             showdata += "<br>"
-        return render_template("input.html", r = showdata)
+        return render_template("index.html", r = showdata)
     else:
-        return render_template("input.html")
+        return render_template("index.html")
 
 
 def main():
