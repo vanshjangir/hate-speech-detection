@@ -57,7 +57,7 @@ def result(text):
             negative += "\n\n"
             num += 1 
 
-    negative = f"{num} hate comments<br>" + negative
+    negative = f"<br>{num} hate comments<br>" + negative
 
     if len(negative) == 0:
         negative = "This document does not contains any hate speech"

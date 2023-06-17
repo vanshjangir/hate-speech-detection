@@ -10,8 +10,16 @@ def home():
 @app.route("/input", methods = ["POST", "GET"])
 def input():
     if request.method == "POST":
-        formdata = request.form['input']
-        final = bridge.userinput(link = formdata)
+        textdata = request.form['text']
+        linkdata = request.form['youtube link']
+        filedata = request.form['file']
+        
+        final = ""
+        if len(textdata) != 0:
+            final = bridge.userinput(text = textdata)
+        else:
+            final = bridge.userinput(link = linkdata)
+
         def generate():
             for line in final.split("\n\n"):
                 yield line 
