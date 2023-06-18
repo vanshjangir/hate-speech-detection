@@ -33,7 +33,7 @@ def fetch_video_comments(video_id, api_key):
     except HttpError as e:
 #        print('An HTTP error occurred:')
 #        print(e)
-        return []
+        return "ERROR 1"
 
 
 
