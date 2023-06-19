@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        @font-face {
+            font-family: 'MyFont';
+            src: url('AquireBold-8Ma60.otf') format('opentype');
+            /* Add any additional font properties here, such as font-weight or font-style */
+        }
+
+        body {
+            font-family: 'MyFont', AquireBold-8Ma60 ;
+            /* Additional styles for the body element */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('back2.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        #heading {
+            margin-top: -50px;
+            margin-bottom: 50px;
+        }
+
+        #title {
+            font-size: 72px;
+            font-weight: bold;
+            color: #000000;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        input[type="submit"] {
+            width: 250px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border: none;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            transform: scale(1.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            line-height: 150px;
+            cursor: pointer;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border: none;
+            animation: buttonAnimation 1s ease-in-out infinite alternate;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .button:first-child {
+            background: linear-gradient(to right, #fc4a1a, #f7b733);
+        }
+
+        .button:hover {
+            transform: scale(1.1);
+        }
+
+        .input-box {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .show-input-box {
+            display: block;
+        }
+    </style>
+    <title>index</title>
+</head>
+
+<body>
+    <div id="heading">
+        <p id="title">Hate Speech Detection</p>
+    </div>
+    <div class="button-container">
+        <button class="button" id="text-btn">Text</button>
+        <button class="button" id="youtube-btn">YouTube</button>
+    </div>
+    <form action="#" method="post">
+        <p><input type="text" name="text" placeholder="Enter the text here" class="input-box" id="text-input" /></p>
+        <p><input type="text" name="youtube link" placeholder="Enter YouTube link" class="input-box" id="youtube-input" /></p>
+        <p><input type="file" name="file" class="input-box" id="file-input" /></p>
+        <p><input type="submit" value="Submit" /></p>
+    </form>
+    <p>{{r | safe}}</p>
+
+    <script>
+        const textBtn = document.getElementById('text-btn');
+        const youtubeBtn = document.getElementById('youtube-btn');
+        const textInput = document.getElementById('text-input');
+        const youtubeInput = document.getElementById('youtube-input');
+        const fileInput = document.getElementById('file-input');
+
+        textBtn.addEventListener('click', () => {
+            textInput.classList.toggle('show-input-box');
+        });
+
+        youtubeBtn.addEventListener('click', () => {
+            youtubeInput.classList.toggle('show-input-box');
+        });
+    </script>
+</body>
+
+</html>
